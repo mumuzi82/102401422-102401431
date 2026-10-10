@@ -43,7 +43,10 @@
     var editing = null;
     if (query && query.edit) {
       var found = LF.app.find(query.edit);
-      if (found) {
+      // 修 bug：只能编辑自己的信息。手改地址塞进别人的 id 时，
+      // 之前会把表单回填成"保存修改"，一提交就把别人的标题改掉了。
+      // 现在不是自己的就忽略 edit，当成新建处理。
+      if (found && LF.app.isMine(found)) {
         editing = found;
         type = found.type;
       }
@@ -188,6 +191,10 @@
 
   function submitForm(view, type, editing) {
     parts.clearErrors(view);
+
+    // 双保险：渲染时已经判断过一次，提交前再确认这条还是自己的。
+    // 不是自己的就当新建，绝不覆盖别人的记录。
+    if (editing && !LF.app.isMine(editing)) editing = null;
 
     var imageRow = view.querySelector('[data-name="image"]');
     var imageHost = imageRow && imageRow.closest('.form-row');

@@ -259,6 +259,75 @@ async function main() {
   check('从个人页点卡片进的是寻物详情页（有标记已结束）',
     await evaluate('/标记已结束/.test(document.body.textContent)'), true);
 
+  /* ------------------------------------------------ 越权守卫（修 bug 后补的回归） */
+  console.log('\n== 越权守卫：手改地址能不能动别人的信息 ==');
+  await goto('/home');
+  check('示例数据里 i-ebike-key 不是我的',
+    await evaluate('LF.app.isMine(LF.app.find("i-ebike-key"))'), false);
+
+  await goto('/mine/detail/i-ebike-key');
+  check('★ 别人的 id 进发布者视角 → 被换成浏览者视角',
+    await evaluate('!document.querySelector(".detail-title")'), true);
+  check('★ 看不到「标记已结束」',
+    await evaluate('/标记已结束/.test(document.body.textContent)'), false);
+  check('★ 看不到「取消发布」',
+    await evaluate('/取消发布/.test(document.body.textContent)'), false);
+  check('  看到的是浏览者视角的「联系发布者」',
+    await evaluate('!!document.querySelector(".action-bar .btn")'), true);
+
+  await goto('/publish/lost?edit=i-ebike-key');
+  check('★ 带别人的 id 来编辑 → 表单不回填',
+    await evaluate('document.querySelector(\'[data-name="title"]\').value'), '');
+  check('★ 按钮是「点击发布」而不是「保存修改」',
+    await evaluate('document.querySelector(".actions .btn").textContent'), '点击发布');
+
+  await goto('/mine/detail/i-student-card');
+  check('自己的信息上「标记已结束」还在',
+    await evaluate('/标记已结束/.test(document.body.textContent)'), true);
+  await click('.detail-title .icon-action');
+  check('自己的信息能进编辑并回填',
+    await evaluate('document.querySelector(\'[data-name="title"]\').value'), '学生证');
+
+  /* ------------------------------------------------ 数据损坏（修 bug 后补的回归） */
+  console.log('\n== 本地数据损坏时的表现 ==');
+  // 这件事必须整页重载，应用才会重新读取存储
+  async function hardGoto(hash) {
+    await send('Page.navigate', { url: BASE + '#' + hash });
+    await sleep(250);
+    await send('Page.reload');
+    await sleep(1100);
+  }
+
+  await evaluate(`localStorage.setItem('lf.items.v1', '{坏掉的 JSON')`);
+  await hardGoto('/home');
+  check('★ 首页把错误告诉用户（不再被路由渲染盖掉）',
+    await evaluate('/本地数据读取失败/.test(document.body.textContent)'), true);
+  check('★ 摊出了原始内容供留底',
+    await evaluate('!!document.querySelector(".raw-area") && document.querySelector(".raw-area").value.indexOf("坏掉的 JSON") >= 0'),
+    true);
+  check('★ 底部导航被隐藏',
+    await evaluate('document.getElementById("tabbar").hidden'), true);
+  check('★ 损坏的原始字符串还没被覆盖',
+    await evaluate(`localStorage.getItem('lf.items.v1')`), '{坏掉的 JSON');
+  await shot('p11-corrupt.png');
+
+  await hardGoto('/publish/lost');
+  check('★ 读取失败时发布页也进不去（仍显示错误页）',
+    await evaluate('/本地数据读取失败/.test(document.body.textContent)'), true);
+  await evaluate(`(function(){ try { LF.app.add({id:'sneak'}); } catch(e){} return 1; })()`);
+  check('★ 连直接调 add() 也写不进去',
+    await evaluate(`localStorage.getItem('lf.items.v1')`), '{坏掉的 JSON');
+
+  await hardGoto('/home');
+  await evaluate('window.confirm = function () { return true; };');
+  await click('.empty.is-error .btn');
+  await sleep(800);
+  check('★ 点「恢复示例数据」后回到正常首页',
+    await evaluate('document.querySelectorAll(".card").length'), 8);
+  check('★ 底部导航回来了',
+    await evaluate('document.getElementById("tabbar").hidden'), false);
+  await shot('p11-corrupt-recovered.png');
+
   /* ------------------------------------------------ 收尾 */
   console.log('\n== 附：底部导航四个入口都能走通 ==');
   for (const [nav, hash] of [['home', '/home'], ['search', '/search'], ['publish', '/publish'], ['mine', '/mine']]) {

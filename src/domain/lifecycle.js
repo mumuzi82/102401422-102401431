@@ -116,6 +116,24 @@
     return apply(items, id, S.STATUS.ACTIVE, now);
   }
 
+  /**
+   * 这条记录是不是"我的"。
+   *
+   * 为什么不写在 app.js 里：它是一条**业务规则**（谁有权改这条信息），
+   * 放在领域层才能被单元测试盯住；而页面里那两个守卫（发布者视角的详情页、
+   * 编辑回填）都靠它。本项目没有登录，身份就是本机档案里的学工号。
+   *
+   * 修 bug 的背景：之前 `#/mine/detail/<别人的id>` 和
+   * `#/publish/lost?edit=<别人的id>` 都没有校验，手改地址就能
+   * 把别人的信息标记成已结束、甚至删掉，或者改掉别人的标题。
+   */
+  function owns(item, profile) {
+    if (!item || !profile) return false;
+    var sid = T.text(profile.sid);
+    if (!sid) return false;
+    return !!(item.publisher && T.text(item.publisher.sid) === sid);
+  }
+
   domain.lifecycle = {
     TRANSITIONS: TRANSITIONS,
     isResolved: isResolved,
@@ -125,6 +143,7 @@
     canGo: canGo,
     apply: apply,
     resolve: resolve,
-    restore: restore
+    restore: restore,
+    owns: owns
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

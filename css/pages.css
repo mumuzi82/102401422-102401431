@@ -94,3 +94,35 @@
 }
 .entry-row-ico { line-height: 0; }
 .entry-row-text { font-weight: 800; font-size: 14px; }
+
+/* ------------------------------------------- 本地数据读取失败时的整页提示 */
+
+/* 这一页要能看清、能操作：错误文案 + 可全选复制的原始内容 + 恢复按钮 */
+.empty.is-error {
+  margin: var(--sp-4);
+  padding: var(--sp-5) var(--sp-4);
+  text-align: left;
+  color: var(--text-2);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+.empty.is-error .empty-ico { text-align: center; }
+.empty.is-error h3 {
+  color: var(--brand); font-size: 16px; text-align: center; margin-bottom: var(--sp-3);
+}
+.empty.is-error p { font-size: 13px; line-height: 1.8; }
+
+.raw-box { margin: var(--sp-3) 0 0; }
+.raw-area {
+  width: 100%;
+  font: 11.5px/1.5 "Cascadia Mono", Consolas, monospace;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: var(--sp-3);
+  resize: vertical;
+  word-break: break-all;
+}

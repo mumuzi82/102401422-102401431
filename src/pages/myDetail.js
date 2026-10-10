@@ -18,6 +18,16 @@
 
   function render(params) {
     var item = LF.app.find(params.id);
+
+    // 发布者视角只给信息的主人看。
+    // 修 bug：之前这里没有校验，手改地址打开 #/mine/detail/<别人的id> 就能
+    // 把别人的信息标记成已结束、甚至「取消发布」删掉。
+    // 换成浏览者视角时用 replace 而不是 go，免得后退键在两个地址间弹来弹去。
+    if (item && !LF.app.isMine(item)) {
+      ui.router.replace('/detail/' + item.id);
+      return;
+    }
+
     var view = ui.shell.view();
     ui.shell.hideAppbar();
     ui.shell.tabbar(null);

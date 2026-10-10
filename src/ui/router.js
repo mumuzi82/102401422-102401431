@@ -75,7 +75,8 @@
   }
 
   /** 跳到一个新地址。会写进浏览历史，所以后退键可用 */
-  function go(path, query) {
+  /** 把「路径 + 查询」拼成 hash 片段 */
+  function buildHash(path, query) {
     var hash = '#/' + String(path).replace(/^\/+/, '');
     if (query) {
       var parts = [];
@@ -85,12 +86,34 @@
       });
       if (parts.length) hash += '?' + parts.join('&');
     }
+    return hash;
+  }
+
+  /** 跳到一个新地址。会写进浏览历史，所以后退键可用 */
+  function go(path, query) {
+    var hash = buildHash(path, query);
     if (root.location.hash === hash) {
       // 地址没变时 hashchange 不会触发，手动重放一次，保证页面刷新
       root.LF.app && root.LF.app.renderCurrent && root.LF.app.renderCurrent();
       return;
     }
     root.location.hash = hash;
+  }
+
+  /**
+   * 替换当前地址，**不新增历史记录**。
+   *
+   * 用在"这个页面不该给这个访问者看"的场合：例如别人手改地址打开
+   * 发布者视角的详情页时，直接换成浏览者视角，而不是让后退键在两个地址
+   * 之间来回弹（go 会 push 一条历史，replace 不会）。
+   */
+  function replace(path, query) {
+    var hash = buildHash(path, query);
+    if (root.location.hash === hash) {
+      root.LF.app && root.LF.app.renderCurrent && root.LF.app.renderCurrent();
+      return;
+    }
+    root.location.replace(root.location.pathname + root.location.search + hash);
   }
 
   /** 返回上一页；没有历史就回首页（例如直接从 #/detail/x 打开的情况） */
@@ -123,6 +146,7 @@
     DEFAULT_PATH: DEFAULT_PATH,
     parse: parse,
     go: go,
+    replace: replace,
     back: back,
     start: start,
     current: function () { return parse(); }

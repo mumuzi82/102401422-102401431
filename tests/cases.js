@@ -330,7 +330,28 @@
           expect: [{ action: 'resolve', label: '标记已找到' }] },
         { name: '已结束的条目改为可撤销', run: function () { return L.actions(DONE); },
           expect: [{ action: 'restore', label: '撤销标记' }] },
-        { name: '空记录没有动作', run: function () { return L.actions(null); }, expect: [] }
+        { name: '空记录没有动作', run: function () { return L.actions(null); }, expect: [] },
+
+        /* ---- owns：这条是不是"我的"（权限判断，修越权 bug 时补的） ---- */
+        { name: '学工号一致 → 是我的', run: function () {
+            return L.owns({ publisher: { sid: '102401422' } }, { sid: '102401422' });
+          }, expect: true },
+        { name: '学工号不一致 → 不是我的', run: function () {
+            return L.owns({ publisher: { sid: '102401431' } }, { sid: '102401422' });
+          }, expect: false },
+        { name: '★ 没有发布者的记录不属于任何人', run: function () {
+            return [L.owns({ publisher: null }, { sid: '102401422' }),
+                    L.owns({}, { sid: '102401422' })];
+          }, expect: [false, false] },
+        { name: '★ 缺参数的异常输入一律 false，不抛异常', run: function () {
+            return [L.owns(null, { sid: 'x' }),
+                    L.owns({ publisher: { sid: 'x' } }, null),
+                    L.owns({ publisher: { sid: 'x' } }, {}),
+                    L.owns({ publisher: { sid: '' } }, { sid: '' })];
+          }, expect: [false, false, false, false] },
+        { name: '学工号两侧空格不影响判断', run: function () {
+            return L.owns({ publisher: { sid: ' 102401422 ' } }, { sid: '102401422' });
+          }, expect: true },
       ]
     },
 
