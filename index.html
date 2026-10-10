@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#BD3124">
+<meta name="description" content="校园失物招领：发布寻物与招领信息、按关键词搜索、查看详情与发布者联系方式、找回或归还后由发布者标记已结束。">
+<title>校园失物招领</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+
+<div class="phone">
+  <!-- 手机状态栏 -->
+  <div class="statusbar">
+    <span id="clock">--:--</span>
+    <span class="statusbar-icons" aria-hidden="true">
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" width="3" height="11" rx="1"/></svg>
+      <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 10.5 5.2 7.7a4 4 0 0 1 5.6 0L8 10.5zM8 5.6c-1.9 0-3.6.7-4.9 2L1.4 5.9A9.4 9.4 0 0 1 8 3.3c2.5 0 4.8 1 6.6 2.6l-1.7 1.7A7.4 7.4 0 0 0 8 5.6zM8 .9C4.8.9 1.9 2.1-.3 4.1l1.7 1.7A11.4 11.4 0 0 1 8 2.9c2.6 0 4.9 1.1 6.6 2.9l1.7-1.7C14.1 2.1 11.2.9 8 .9z"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3" fill="none" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="16" height="8" rx="1.5" fill="currentColor"/><path d="M23 4v4a2.2 2.2 0 0 0 0-4z" fill="currentColor" fill-opacity=".4"/></svg>
+    </span>
+  </div>
+
+  <!-- 通用顶部栏：各页面按需开启（返回箭头 / 标题 / 右侧插槽） -->
+  <header class="appbar" id="appbar" hidden>
+    <button class="appbar-back" id="appbarBack" type="button" aria-label="返回">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg>
+    </button>
+    <h1 class="appbar-title" id="appbarTitle"></h1>
+    <div class="appbar-extra" id="appbarExtra"></div>
+  </header>
+
+  <!-- 页面容器：10 个原型页面都渲染在这里 -->
+  <main class="view" id="view"></main>
+
+  <!-- 悬浮胶囊底部导航（原型如此），部分页面不显示 -->
+  <nav class="tabbar" id="tabbar" hidden aria-label="主导航">
+    <button class="tabbar-item" type="button" data-nav="home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v8.5a1 1 0 0 1-1 1h-4.5V15h-5v5.5H5a1 1 0 0 1-1-1z"/></svg>
+      <span>首页</span>
+    </button>
+    <button class="tabbar-item" type="button" data-nav="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>搜索</span>
+    </button>
+    <button class="tabbar-item" type="button" data-nav="publish">
+      <span class="pub-circle" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 6.5v11M6.5 12h11" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+      </span>
+      <span>发布</span>
+    </button>
+    <button class="tabbar-item" type="button" data-nav="mine">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.2" r="4"/><path d="M4.2 20.4c0-3.9 3.5-6.2 7.8-6.2s7.8 2.3 7.8 6.2z"/></svg>
+      <span>我的</span>
+    </button>
+  </nav>
+
+  <div class="home-indicator" aria-hidden="true"></div>
+</div>
+
+<!-- 信息卡片模板：结构与图标写在 HTML 里，JS 只做「克隆 + 填字段」 -->
+<template id="tpl-card">
+  <article class="card" tabindex="0" role="button">
+    <div class="card-head">
+      <h3 class="card-title"></h3>
+      <span class="tag js-state"></span>
+      <span class="tag js-type"></span>
+    </div>
+    <div class="card-body">
+      <div class="card-thumb js-thumb"></div>
+      <div class="card-meta">
+        <div class="meta-row">
+          <span class="meta-ico" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>
+          </span>
+          <span class="js-time"></span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-ico" aria-hidden="true">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10.5c0 5.5-8 11.5-8 11.5s-8-6-8-11.5a8 8 0 0 1 16 0z"/><circle cx="12" cy="10.5" r="2.8"/></svg>
+          </span>
+          <span class="js-place"></span>
+        </div>
+      </div>
+    </div>
+  </article>
+</template>
+
+<!-- 依赖顺序：domain（规则）→ storage（持久化）→ ui（外壳与零件）→ pages（各页面）→ app（装配） -->
+<script src="src/domain/schema.js"></script>
+<script src="src/domain/text.js"></script>
+<script src="src/domain/lifecycle.js"></script>
+<script src="src/domain/query.js"></script>
+<script src="src/domain/validate.js"></script>
+<script src="src/storage/adapter.js"></script>
+<script src="src/storage/seed.js"></script>
+<script src="src/ui/dom.js"></script>
+<script src="src/ui/router.js"></script>
+<script src="src/ui/toast.js"></script>
+<script src="src/ui/card.js"></script>
+<script src="src/ui/shell.js"></script>
+<script src="src/ui/parts.js"></script>
+<script src="src/pages/home.js"></script>
+<script src="src/pages/search.js"></script>
+<script src="src/pages/searchResult.js"></script>
+<script src="src/pages/publish.js"></script>
+<script src="src/pages/publishForm.js"></script>
+<script src="src/pages/success.js"></script>
+<script src="src/pages/detail.js"></script>
+<script src="src/pages/myDetail.js"></script>
+<script src="src/pages/contact.js"></script>
+<script src="src/pages/mine.js"></script>
+<script src="src/app.js"></script>
+<script>
+  // 状态栏时钟
+  (function () {
+    var el = document.getElementById('clock');
+    function tick() {
+      var d = new Date();
+      el.textContent = d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    }
+    tick();
+    setInterval(tick, 20000);
+  })();
+</script>
+</body>
+</html>

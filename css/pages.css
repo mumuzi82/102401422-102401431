@@ -1,0 +1,96 @@
+/* ==========================================================================
+   pages.css —— 各原型页面专用的版式
+   （基础与共用组件在 style.css，这里只放详情页 / 个人页这些页面独有的一块）
+   ========================================================================== */
+
+/* ------------------------------------------------- 带图标的区块标题 */
+
+.icon-title {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4) var(--sp-2);
+}
+.icon-title-ico { color: var(--brand); line-height: 0; flex: 0 0 auto; }
+.icon-title-text { color: var(--brand); font-weight: 800; font-size: 14.5px; }
+
+/* --------------------------------------------- 详情页的白色投影卡片 */
+
+.pub-card {
+  margin: 0 var(--sp-4) var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.pub-head { display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+
+.pub-line { font-size: 13.5px; line-height: 1.9; }
+.pub-line b { color: var(--brand); font-weight: 700; }
+.pub-gap { height: var(--sp-4); }
+
+/* 卡片 B：每行一枚红色线性图标 */
+.icon-line {
+  display: flex; align-items: center; gap: var(--sp-2);
+  font-size: 13.5px; line-height: 2.2;
+}
+.icon-line-ico { color: var(--brand); line-height: 0; flex: 0 0 auto; }
+.icon-line b { color: var(--brand); font-weight: 700; flex: 0 0 auto; }
+
+/* ------------------------------------------- 详情页底部操作条 */
+
+.action-bar {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-4);
+  margin-top: auto;
+  background: var(--surface);
+}
+.action-bar .btn { flex: 1; }
+.action-tools { display: flex; align-items: center; gap: var(--sp-3); color: var(--brand); }
+.action-ico { line-height: 0; }
+
+/* ------------------------------------------------------- 个人页 */
+
+.mine-card {
+  margin: 0 var(--sp-4) var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+.mine-card-top { display: flex; flex-direction: column; gap: var(--sp-3); }
+.mine-label { color: var(--brand); font-weight: 800; font-size: 12.5px; }
+.mine-body { display: flex; align-items: center; gap: var(--sp-4); }
+
+.avatar {
+  flex: 0 0 56px; width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 2px solid #BBBBBB;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.avatar-mark { color: var(--brand); font-size: 24px; font-weight: 800; line-height: 1; }
+
+.mine-main { flex: 1; min-width: 0; }
+.mine-name { color: var(--brand); font-weight: 800; font-size: 16px; }
+.mine-sub { color: var(--brand); font-weight: 700; font-size: 14px; letter-spacing: .5px; }
+
+.mine-card-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  color: var(--brand); font-weight: 700; font-size: 13px;
+}
+.mine-count b { font-size: 15px; }
+
+/* 「我的收藏」入口卡（原型有入口，没有对应列表页，故不可点） */
+.entry-row {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin: 0 var(--sp-4) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  color: var(--brand);
+}
+.entry-row-ico { line-height: 0; }
+.entry-row-text { font-weight: 800; font-size: 14px; }
