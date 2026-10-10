@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目说明</title>
+<style>
+  :root { --brand:#0FA96B; --text:#1F2937; --muted:#6B7688; --line:#E6EBF1; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 20px 80px;
+    background: #F4F6F9; color: var(--text);
+    font: 15px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  }
+  main {
+    max-width: 900px; margin: 0 auto; background: #fff;
+    padding: 48px 52px 64px; border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(24,39,75,.07);
+  }
+  h1 { font-size: 27px; line-height: 1.4; margin: 0 0 22px; padding-bottom: 16px; border-bottom: 2px solid var(--line); }
+  h2 { font-size: 21px; margin: 42px 0 14px; padding-left: 12px; border-left: 4px solid var(--brand); }
+  h3 { font-size: 17px; margin: 28px 0 10px; color: #2C3A4E; }
+  h4, h5, h6 { font-size: 15px; margin: 20px 0 8px; color: var(--muted); }
+  p { margin: 12px 0; }
+  a { color: var(--brand); text-decoration: none; border-bottom: 1px solid #B7E7D0; }
+  a:hover { border-bottom-color: var(--brand); }
+  strong { color: #101B2B; }
+  ul, ol { padding-left: 24px; margin: 12px 0; }
+  li { margin: 5px 0; }
+  hr { border: 0; border-top: 1px dashed var(--line); margin: 34px 0; }
+  code {
+    background: #F1F4F8; color: #B5325A; padding: 2px 6px; border-radius: 5px;
+    font: 13px/1.5 "Cascadia Mono", Consolas, "Courier New", monospace;
+  }
+  pre.code {
+    background: #1E2530; color: #E6EDF3; padding: 18px 20px; border-radius: 10px;
+    overflow-x: auto; margin: 16px 0;
+  }
+  pre.code code { background: none; color: inherit; padding: 0; font-size: 13px; line-height: 1.65; }
+  blockquote {
+    margin: 16px 0; padding: 12px 18px; background: #F7FBF9;
+    border-left: 4px solid var(--brand); border-radius: 0 8px 8px 0; color: #3D4B5C;
+  }
+  blockquote p { margin: 6px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 18px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: #F4F8F6; font-weight: 700; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: #FAFCFD; }
+  @media (max-width: 720px) {
+    body { padding: 16px 10px 40px; }
+    main { padding: 24px 18px 40px; border-radius: 10px; }
+    h1 { font-size: 22px; }
+    table { font-size: 12.5px; }
+    th, td { padding: 7px 8px; }
+  }
+</style>
+</head>
+<body>
+<main>
+<h1 id="h-校园失物招领">校园失物招领</h1>
+<blockquote><p>2026 秋软件工程结对作业（第二次之程序实现）<br>基于第一次结对作业的墨刀原型，把原型里的 <strong>10 个页面</strong>逐一实现成可以直接用的网页。</p></blockquote>
+<p><strong>原生 HTML / CSS / JavaScript，零第三方依赖。</strong><br>不需要 <code>npm install</code>，不需要构建，不需要起服务器 —— <strong>双击 <code>index.html</code> 就能用</strong>。</p>
+<hr>
+<h2 id="h-一-使用说明-测试人员看这里-">一、使用说明（测试人员看这里）</h2>
+<h3 id="h-1-怎么看网页">1. 怎么看网页</h3>
+<ol><li>把整个文件夹下载到本地（<strong>保持目录结构不变</strong>，<code>assets/</code> 与 <code>src/</code> 都要在）；</li><li><strong>双击 <code>index.html</code></strong>（或右键 → 打开方式 → Google Chrome）；</li><li>完成。</li></ol>
+<blockquote><p>唯一的环境要求是<strong>用谷歌浏览器打开</strong>（作业要求里明确的，不同浏览器效果可能不一致）。<br>数据存在浏览器本机的 <code>localStorage</code> 里，关掉再打开记录还在。<br>想回到初始的示例数据：浏览器控制台执行 <code>localStorage.clear()</code> 后刷新。</p></blockquote>
+<h3 id="h-2-怎么跑单元测试-可选-">2. 怎么跑单元测试（可选）</h3>
+<p>两种跑法，用的是<strong>同一份用例</strong>（<code>tests/cases.js</code>）：</p>
+<table><thead><tr><th>方式</th><th>怎么做</th><th>适合谁</th></tr></thead><tbody><tr><td>命令行</td><td>项目根目录执行 <code>npm test</code></td><td>装了 Node.js（≥ 22）的同学</td></tr><tr><td>浏览器</td><td>用 Chrome 打开 <code>tests/run-browser.html</code></td><td><strong>没装 Node 也能跑</strong>，结果直接显示在页面上</td></tr></tbody></table>
+<blockquote><p>命令行若报 <code>无法加载文件 ...\npm.ps1，因为在此系统上禁止运行脚本</code>，那是 Windows PowerShell 的默认执行策略挡住了 <code>npm.ps1</code>，与本项目无关。改跑 <code>npm.cmd test</code> 或 <code>node tests/run-node.mjs</code> 即可。</p></blockquote>
+<h3 id="h-3-十页走一遍的推荐路线">3. 十页走一遍的推荐路线</h3>
+<table><thead><tr><th>想看什么</th><th>怎么走</th></tr></thead><tbody><tr><td>首页信息流与三个 Tab</td><td>打开就是；点「全部失物 / 失物寻找 / 失物招领」切换</td></tr><tr><td>搜索与关键词高亮</td><td>底部「搜索」→ 点「学生证」标签 → 看结果与高亮</td></tr><tr><td>发布一条信息</td><td>底部「发布」→ 点「我丢失了物品」→ 填表 → 点「点击发布」</td></tr><tr><td>表单校验</td><td>在发布页<strong>什么都不填</strong>直接点「点击发布」，会逐项标红</td></tr><tr><td>发布成功页</td><td>正常提交后自动进入</td></tr><tr><td>发布者视角的详情页</td><td>提交后点「查看发布详情」（可「标记已结束」或「取消发布」）</td></tr><tr><td>浏览者视角的详情页</td><td>回首页，点「电动车钥匙」那张卡</td></tr><tr><td>联系发布者页面</td><td>在上面那页点底部「联系发布者」</td></tr><tr><td>个人页</td><td>底部「我的」</td></tr></tbody></table>
+<hr>
+<h2 id="h-二-目录说明">二、目录说明</h2>
+<pre class="code"><code>campus-lost-and-found/
+├── index.html                 页面外壳（状态栏 / 顶部栏 / 页面容器 / 底部导航）+ 卡片 &lt;template&gt;
+├── package.json               零依赖；只提供一条 npm test
+├── README.md                  本文件（目录说明 + 使用说明）
+├── .gitignore
+│
+├── assets/                    图片素材（第一次作业用过的原始文件）
+│   ├── logo-fzu.png             福州大学校徽组合
+│   └── items/
+│       ├── ebike-key.png        电动车钥匙照片（原型首页第 1 条）
+│       └── student-card.jpg     学生证照片（原型首页第 2 条）
+│
+├── css/
+│   ├── style.css              设计变量 + 外壳 + 共用组件（卡片、标签、表单行、底部导航…）
+│   └── pages.css              各页面专用版式（详情页的卡片、个人页的我的卡…）
+│
+├── src/
+│   ├── domain/                ★ 领域层：只管&quot;校园失物招领这件事本身&quot;的规则
+│   │   ├── schema.js            常量与记录结构（类型、状态、类别、字段上限、结构校验）
+│   │   ├── text.js              文本与时间（关键词分段、时间文案、联系方式掩码）
+│   │   ├── lifecycle.js         ★ 状态机：进行中 ⇄ 已找到/已归还，以及合法迁移表
+│   │   ├── query.js             匹配 / 筛选 / 排序 / 统计
+│   │   └── validate.js          表单校验 + 外部备份导入校验
+│   │
+│   ├── storage/               数据层
+│   │   ├── adapter.js           可注入后端的仓库（localStorage 或内存），读写失败返回原因
+│   │   └── seed.js              示例数据 + 本机用户档案
+│   │
+│   ├── ui/                    外壳与零件
+│   │   ├── router.js            hash 路由（10 个页面各有一个地址）
+│   │   ├── shell.js             顶部栏 / 页面容器 / 悬浮底部导航
+│   │   ├── parts.js             品牌行、搜索行、区块标题、Tab、标签、表单行、图标…
+│   │   ├── card.js              信息卡片
+│   │   ├── dom.js               造元素、克隆模板、把文本按关键词分段渲染
+│   │   └── toast.js             轻提示（只在保存失败这类异常路径出现）
+│   │
+│   ├── pages/                 10 个页面，一页一个文件
+│   │   ├── home.js              1 首页
+│   │   ├── search.js            2 搜索页面
+│   │   ├── publish.js           3 发布页
+│   │   ├── searchResult.js      4 搜索结果页
+│   │   ├── detail.js            5 信息详情页（浏览者视角）
+│   │   ├── mine.js              6 个人页
+│   │   ├── contact.js           7 联系发布者页面
+│   │   ├── publishForm.js       8 寻物发布页（招领共用）
+│   │   ├── myDetail.js          9 寻物详情页（发布者视角）
+│   │   └── success.js          10 发布成功页
+│   │
+│   └── app.js                 装配与启动：数据入口 + 路由分发
+│
+├── tests/
+│   ├── cases.js               ★ 135 个用例，表驱动的一整份数据
+│   ├── runner.js                极小的运行器（用例是数据，运行器是逻辑）
+│   ├── run-node.mjs             命令行跑法
+│   └── run-browser.html         浏览器跑法（与上面共用同一份 cases.js）
+│
+├── scripts/
+│   ├── verify-pages.mjs       CDP 逐页走查 10 个页面（72 项断言 + 自动截图）
+│   └── md-to-html.mjs          把 md 转成可双击阅读的 html
+│
+└── docs/
+    ├── 工作计划.md / .html      开发计划：分工、里程碑、PSP、测试计划
+    └── shots/                 走查截图（含 compare-all.png：原型 vs 实现 对照图）</code></pre>
+<h3 id="h-目录为什么这样分">目录为什么这样分</h3>
+<pre class="code"><code>   用户操作
+      │
+      ▼
+   app.js ──────▶ storage/ ──▶ （localStorage / 内存）
+      │               ▲
+      │               │ 只调规则，不碰界面
+      ▼               │
+  pages/ + ui/ ──▶ domain/（规则）</code></pre>
+<ul><li><strong>依赖方向单向</strong>：<code>app → pages/ui → domain</code>，<code>app → storage → domain</code>。</li></ul>
+<p>  <code>domain/</code> 里没有任何一行碰 DOM、碰存储、碰网络，所以能被直接单元测试；</p>
+<ul><li><strong><code>domain/</code> 同时被浏览器和 Node 加载</strong>：源码写成浏览器能直接 <code>&lt;script&gt;</code> 跑的普通脚本，</li></ul>
+<p>  测试用 <code>vm.runInThisContext</code> 加载<strong>同一批文件</strong>，不存在&quot;测试里是副本&quot;而慢慢长歪的风险；</p>
+<ul><li><strong>不用 <code>import</code> / <code>export</code></strong>：ES module 在 <code>file://</code> 协议下会被浏览器的跨域策略拦掉（实测双击直接白屏），</li></ul>
+<p>  而作业要求&quot;下载后运行 html 就能展现预期结果&quot;，所以只能用普通脚本。</p>
+<hr>
+<h2 id="h-三-10-个页面与原型的对照">三、10 个页面与原型的对照</h2>
+<table><thead><tr><th>#</th><th>原型页面</th><th>本程序的路由</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>首页</td><td><code>#/home</code></td><td>校徽标题行 + 搜索行 + 近期失物信息 + 三个 Tab + 卡片列表</td></tr><tr><td>2</td><td>搜索页面</td><td><code>#/search</code></td><td>返回箭头 + 搜索框 + 搜索按钮 +「常见物品」四个标签</td></tr><tr><td>3</td><td>发布页</td><td><code>#/publish</code></td><td>两张深红入口卡：我丢失了物品 / 我捡到了物品</td></tr><tr><td>4</td><td>搜索结果页</td><td><code>#/search-result?q=</code></td><td>搜索结果 + 共找到 N 条相关结果 + 结果卡片</td></tr><tr><td>5</td><td>信息详情页</td><td><code>#/detail/:id</code></td><td>浏览者视角：物品卡片 + 三行字段 + 详细信息 + 发布者信息 +「联系发布者」</td></tr><tr><td>6</td><td>个人页</td><td><code>#/mine</code></td><td>品牌头（带齿轮）+「我的」卡 + 我的收藏入口 + 我的发布 + 三个 Tab</td></tr><tr><td>7</td><td>联系发布者页面</td><td><code>#/contact/:id</code></td><td>发布者信息卡：姓名 / 学工号 / 学院 + 联系电话 + 邮箱</td></tr><tr><td>8</td><td>寻物发布页</td><td><code>#/publish/lost</code></td><td>基本信息 5 行（4 个必填）+ 详细信息 + 联系方式 +「点击发布」</td></tr><tr><td>9</td><td>寻物详情页</td><td><code>#/mine/detail/:id</code></td><td>发布者视角：标题带编辑铅笔 + 电话邮箱 +「标记已结束 / 取消发布」</td></tr><tr><td>10</td><td>发布成功页</td><td><code>#/success</code></td><td>红色对勾 +「发布成功！」+「查看发布详情」</td></tr></tbody></table>
+<p>配色直接取自墨刀原型截图的实测像素值：</p>
+<table><thead><tr><th>用途</th><th>色值</th></tr></thead><tbody><tr><td>品牌红（校名 / 搜索按钮 / Tab 选中）</td><td><code>#BD3124</code></td></tr><tr><td>卡片边框</td><td><code>#CD6258</code></td></tr><tr><td>进行中</td><td>底 <code>#FFE5C4</code> / 字 <code>#C7781B</code></td></tr><tr><td>已找到 · 已归还</td><td>底 <code>#EBBFBB</code> / 字 <code>#BD3124</code></td></tr><tr><td>寻物</td><td>底 <code>#B0E1B7</code> / 字 <code>#2E9B47</code></td></tr><tr><td>招领</td><td>底 <code>#CCE6FF</code> / 字 <code>#0A6FD1</code></td></tr></tbody></table>
+<h3 id="h-两处需要说明的实现取舍">两处需要说明的实现取舍</h3>
+<ol><li><strong>状态文案</strong>：作业原文要求&quot;由发布者将信息标记为<strong>已找到</strong>或<strong>已归还</strong>&quot;，而原型卡片上写的是「已结束」。</li></ol>
+<p>   本程序取两者之长 —— 进行中统一叫「进行中」，终态按类型区分为「已找到 / 已归还」。</p>
+<ol><li><strong>招领发布</strong>：原型只画了「寻物发布页」，但发布页上同时有「我丢失了物品」和「我捡到了物品」两个入口，</li></ol>
+<p>   所以招领复用同一张表单，只把标题与地点/时间的措辞按类型换掉（丢失 ↔ 拾获）。</p>
+<ol><li><strong>原型上有图标但没有对应流程的东西</strong>（首页信封、个人页齿轮、详情页星标与举报）：</li></ol>
+<p>   按原型画出来，但<strong>做成装饰而不是按钮</strong> —— 原型里没有消息页、设置页、收藏列表页、举报流程，<br>   做成能点的按钮就成了&quot;点了没反应&quot;的死控件。个人页的「我的收藏」入口同理，列表恒为空。</p>
+<hr>
+<h2 id="h-四-单元测试说明">四、单元测试说明</h2>
+<p><strong>135 个用例，命令行与浏览器两种跑法，全部通过。</strong><br>用例按四类情况铺开：正常 / 边界 / 异常 / 恶意（含 XSS 载荷、正则元字符、重复 id、存储写满、JSON 损坏）。</p>
+<table><thead><tr><th>分组</th><th>覆盖的函数</th></tr></thead><tbody><tr><td><code>schema.check</code></td><td>记录结构校验（字段齐不齐、类型对不对、枚举合不合法）</td></tr><tr><td><code>text.segments</code></td><td>关键词分段（高亮的数据来源，含 HTML 实体与正则元字符）</td></tr><tr><td><code>text</code> 时间与联系方式</td><td><code>itemTime</code> / <code>relativeTime</code> / <code>maskContact</code></td></tr><tr><td><code>query.matches</code></td><td>关键词匹配（空格分隔多词的 AND 语义）</td></tr><tr><td><code>query.filter</code></td><td>筛选（类型 / 类别 / 状态）</td></tr><tr><td><code>query.sort</code></td><td>排序（含&quot;纯函数不改原数组&quot;）</td></tr><tr><td><code>query.summary</code> 等</td><td>统计与计数</td></tr><tr><td><code>lifecycle</code></td><td>状态机：合法迁移、幂等、非法迁移、撤销、纯函数性</td></tr><tr><td><code>validate.publish</code></td><td>表单逐项校验与长度边界</td></tr><tr><td><code>validate.importPayload</code></td><td>备份导入：坏 JSON、缺字段、id 重复</td></tr><tr><td><code>storage</code> 适配器</td><td>种子写入、数据损坏不覆盖、容量写满、导出导入、读改写</td></tr></tbody></table>
+<p>另有 <code>scripts/verify-pages.mjs</code>，用 CDP 驱动真实浏览器按原型逐页走查，<br><strong>72 项断言</strong>覆盖十页的结构、字段、文案与一条完整的发布链路（发布 → 成功页 → 详情页 → 标记已结束），<br>并自动产出 <code>docs/shots/</code> 下的截图。</p>
+<hr>
+<h2 id="h-五-已知限制">五、已知限制</h2>
+<ol><li><strong>没有登录与实名认证</strong>（作业明确不要求）。发布者身份是浏览器本机的固定档案，</li></ol>
+<p>   据此区分「我的信息」和「别人的信息」，所以不存在真正的安全边界 —— 真上线必须补鉴权。</p>
+<ol><li><strong>数据只在本机</strong>：<code>localStorage</code> 不跨设备同步，换电脑看不到自己的记录。</li><li><strong>图片走 base64 存 <code>localStorage</code></strong>，受约 5MB 容量限制，所以上传时限制单张不超过 2MB；</li></ol>
+<p>   写满时会给出中文提示，不会静默丢数据。</p>
+<ol><li><strong>收藏与举报只有外观</strong>：原型里没有对应的列表页与流程，作业正文也明确&quot;不要求&quot;，故未实现。</li><li><strong>本机档案写死在 <code>src/storage/seed.js</code> 的 <code>buildProfile()</code></strong>：没有资料编辑页，改名要改代码。</li></ol>
+</main>
+</body>
+</html>
