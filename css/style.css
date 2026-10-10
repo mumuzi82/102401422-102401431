@@ -404,14 +404,7 @@ select.form-control.has-value { color: var(--text); }
 
 .detail { padding: 0 0 var(--sp-4); }
 
-.detail-title {
-  display: flex; align-items: center; gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-4) var(--sp-3);
-}
-.detail-title h2 {
-  margin: 0; flex: 1;
-  font-size: 17px; font-weight: 800; color: var(--brand);
-}
+/* 顶部栏里那颗图标按钮（目前是寻物详情页的编辑铅笔） */
 .icon-action {
   border: 0; background: transparent; cursor: pointer;
   padding: 2px; line-height: 0; color: var(--brand);

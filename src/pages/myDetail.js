@@ -29,29 +29,33 @@
     }
 
     var view = ui.shell.view();
-    ui.shell.hideAppbar();
     ui.shell.tabbar(null);
 
     if (!item) {
+      ui.shell.appbar({ back: true, title: '失物详情信息' });
       view.appendChild(parts.empty('这条信息不存在，可能已经被取消了'));
       return;
     }
 
     var helper = ui.pages.detail;
 
-    // 标题行：标题 + 右上角铅笔（回发布页编辑）
-    var head = dom.h('div', { class: 'detail-title' }, [
-      dom.h('h2', { text: '失物详情信息' })
-    ]);
+    /**
+     * 顶部栏：返回箭头 + 红字标题 + 右上角的编辑铅笔。
+     *
+     * 原型这一页（09）本来没有顶部栏 —— 标题连铅笔一起放在正文里。
+     * 但那样从「查看发布详情」或手输地址进来就**一个返回入口都没有**，退不出去。
+     * 所以补一条与原型的「信息详情页」（05）同款的顶部栏：一样的返回箭头、
+     * 一样的红字标题；铅笔挪到右上角（原型里它本来也在这条标题的右侧，
+     * 位置基本没变）。
+     */
     var pencil = dom.h('button', { class: 'icon-action', type: 'button', 'aria-label': '编辑这条信息' });
     pencil.appendChild(parts.icons.pencil(20));
     pencil.addEventListener('click', function () {
       ui.router.go('/publish/' + item.type, { edit: item.id });
     });
-    head.appendChild(pencil);
+    ui.shell.appbar({ back: true, title: '失物详情信息', right: pencil });
 
     view.appendChild(dom.h('div', { class: 'detail' }, [
-      head,
       helper.itemCard(item),
       helper.iconFieldCard([
         { icon: parts.icons.tag(15), label: '物品类型', value: item.category },

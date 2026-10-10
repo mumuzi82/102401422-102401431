@@ -204,8 +204,9 @@ async function main() {
   /* ------------------------------------------------ 7 寻物详情页（发布者视角） */
   console.log('\n== 7／10 寻物详情页（发布者视角）==');
   await click('.success .btn');
-  check('标题「失物详情信息」', await evaluate('document.querySelector(".detail-title h2").textContent'), '失物详情信息');
-  check('有编辑铅笔', await evaluate('!!document.querySelector(".detail-title .icon-action")'), true);
+  check('标题「失物详情信息」', await evaluate('document.getElementById("appbarTitle").textContent'), '失物详情信息');
+  check('有编辑铅笔', await evaluate('!!document.querySelector("#appbarExtra .icon-action")'), true);
+  check('★ 有返回箭头（原型这一页没有，是补的）', await evaluate('!!document.getElementById("appbarBack")'), true);
   check('两个按钮', await evaluate('Array.prototype.map.call(document.querySelectorAll(".actions .btn"), function(b){return b.textContent;})'),
     ['标记已结束', '取消发布']);
   check('联系电话平铺展示', await evaluate('/联系电话：/.test(document.body.textContent)'), true);
@@ -216,6 +217,25 @@ async function main() {
   check('标记后状态变「已结束」', await evaluate('/已标记为/.test(document.body.textContent) || document.body.textContent.indexOf("已结束") !== -1'), true);
   check('条目没有被删掉', await evaluate('LF.app.items().length'), beforeCount);
   check('按钮变为不可点（已结束）', await evaluate('document.querySelector(".actions .btn").disabled'), true);
+
+  /* ★ 返回按钮真的能退出去（修复前这一页没有任何返回入口） */
+  const stayHash = await evaluate('location.hash');
+  await click('#appbarBack');
+  await sleep(500);
+  check('★ 点返回箭头能离开寻物详情页',
+    await evaluate(`location.hash !== ${JSON.stringify(stayHash)}`), true);
+  console.log('     返回后落在 ' + await evaluate('location.hash'));
+  await goto(stayHash.slice(1));                      // 回到这一页，后面的用例继续
+  check('回到寻物详情页（顶部栏还在）',
+    await evaluate('document.getElementById("appbarTitle").textContent'), '失物详情信息');
+
+  /* 从个人页进来再退一次，确认退到的是个人页 */
+  await goto('/mine');
+  await click('.card');
+  check('从个人页点卡片进的是寻物详情页', await evaluate('location.hash.indexOf("/mine/detail/") > 0'), true);
+  await click('#appbarBack');
+  await sleep(500);
+  check('★ 从个人页进来，返回能回到个人页', await evaluate('location.hash'), '#/mine');
 
   /* ------------------------------------------------ 8 信息详情页（浏览者视角） */
   console.log('\n== 8／10 信息详情页（浏览者视角）==');
@@ -267,7 +287,7 @@ async function main() {
 
   await goto('/mine/detail/i-ebike-key');
   check('★ 别人的 id 进发布者视角 → 被换成浏览者视角',
-    await evaluate('!document.querySelector(".detail-title")'), true);
+    await evaluate('location.hash'), '#/detail/i-ebike-key');
   check('★ 看不到「标记已结束」',
     await evaluate('/标记已结束/.test(document.body.textContent)'), false);
   check('★ 看不到「取消发布」',
@@ -284,7 +304,7 @@ async function main() {
   await goto('/mine/detail/i-student-card');
   check('自己的信息上「标记已结束」还在',
     await evaluate('/标记已结束/.test(document.body.textContent)'), true);
-  await click('.detail-title .icon-action');
+  await click('#appbarExtra .icon-action');
   check('自己的信息能进编辑并回填',
     await evaluate('document.querySelector(\'[data-name="title"]\').value'), '学生证');
 
@@ -341,6 +361,14 @@ async function main() {
   await goto('/home');
   check('桌面端手机框不超宽', await evaluate('document.querySelector(".phone").getBoundingClientRect().width <= 402'), true);
   await shot('p01-home-desktop.png');
+
+  /* ------------------------------------------------ 提示条要会自己消失 */
+  console.log('\n== 提示条 ==');
+  await evaluate(`LF.ui.toast.show('走查用的临时提示')`);
+  check('提示条出现了', await evaluate('!!document.querySelector(".toast")'), true);
+  await sleep(3400);
+  check('★ 3 秒后自动消失（否则会一直盖在页面上）',
+    await evaluate('!!document.querySelector(".toast")'), false);
 
   ws.close();
   const failed = results.filter((r) => !r.ok);
