@@ -21,7 +21,7 @@
 
   function svg(width, height, attrs) {
     var node = document.createElementNS(SVG_NS, 'svg');
-    node.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    node.setAttribute('viewBox', '0 0 24 24');   // ← 固定 24×24，本项目所有图标都按这个画布绘制
     node.setAttribute('width', width);
     node.setAttribute('height', height);
     node.setAttribute('aria-hidden', 'true');
