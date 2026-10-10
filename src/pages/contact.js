@@ -1,9 +1,7 @@
 /**
  * pages/contact.js —— 原型第 7 页：联系发布者页面
  *
- * 结构：顶部栏（返回 + 联系发布者 + 右侧校徽）
- * ／ 一张「发布者信息」卡片：人像图标 + 红色标题，下面 姓名/学工号/学院，
- *    空一行后接 联系电话 与 邮箱 ／ 页面其余部分留白。没有按钮，也没有底部导航。
+ * ★ 补充：一键复制联系方式（作业原文点名的加分设计）★
  */
 (function (root) {
   'use strict';
@@ -25,8 +23,44 @@
     }
 
     view.appendChild(dom.h('div', { class: 'detail' }, [
-      ui.pages.detail.publisherCard(item, true)
+      ui.pages.detail.publisherCard(item, true),
+      copyBar(item)
     ]));
+  }
+
+  /** 一键复制：把电话与邮箱拼成一行文本塞进剪贴板 */
+  function copyBar(item) {
+    var phone = LF.domain.text.text(item.phone);
+    var email = LF.domain.text.text(item.email);
+    if (!phone && !email) return dom.h('div');
+
+    var text = [];
+    if (phone) text.push('电话：' + phone);
+    if (email) text.push('邮箱：' + email);
+    var payload = text.join('，');
+
+    return dom.h('div', { class: 'actions' }, [
+      parts.primaryButton('一键复制联系方式', function () {
+        // 优先用异步 Clipboard API；失败回退到 execCommand（覆盖 file:// 与旧浏览器）
+        function fallback() {
+          var ta = dom.h('textarea', { class: 'visually-hidden' });
+          ta.value = payload;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); ui.toast.show('已复制：' + payload); }
+          catch (e) { ui.toast.show('复制失败，请手动长按选择'); }
+          document.body.removeChild(ta);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(payload).then(
+            function () { ui.toast.show('已复制：' + payload); },
+            fallback
+          );
+        } else {
+          fallback();
+        }
+      }, { block: true })
+    ]);
   }
 
   ui.pages = ui.pages || {};
