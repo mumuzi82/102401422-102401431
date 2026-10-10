@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>单元测试 · 校园失物招领</title>
+<style>
+  :root { --ok:#1E9E52; --bad:#C0392B; --line:#E6EBF1; --muted:#7A8494; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 16px 60px;
+    background: #F4F6F9; color: #22303F;
+    font: 14px/1.7 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  main { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 21px; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .board {
+    background: #fff; border-radius: 12px; padding: 18px 20px;
+    box-shadow: 0 2px 12px rgba(24,39,75,.07); margin-bottom: 18px;
+  }
+  .board h2 { font-size: 15px; margin: 0 0 10px; }
+  .stats { display: flex; gap: 26px; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 26px; line-height: 1.2; }
+  .stat span { font-size: 12px; color: var(--muted); }
+  .stat.ok b { color: var(--ok); }
+  .stat.bad b { color: var(--bad); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; color: var(--muted); font-weight: 600; }
+  tr.group td { background: #F7F9FB; font-weight: 700; }
+  .tick { color: var(--ok); font-weight: 700; }
+  .cross { color: var(--bad); font-weight: 700; }
+  .detail { color: var(--bad); font-size: 12px; white-space: pre-wrap; font-family: Consolas, monospace; }
+  .note { font-size: 12.5px; color: var(--muted); }
+  code { background: #F3F5F8; padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>校园失物招领 · 单元测试</h1>
+  <p class="sub">
+    这一页和 <code>npm test</code> 跑的是**同一份用例**（<code>tests/cases.js</code>），
+    只是运行器不同：这里用浏览器，命令行用 <code>tests/run-node.mjs</code>。
+    不装 Node 也能验，<code>node</code> 不在场的机器上直接双击打开本文件即可。
+  </p>
+
+  <div class="board" id="board"></div>
+
+  <div class="board">
+    <h2>逐条结果</h2>
+    <table id="table">
+      <thead><tr><th style="width:52px">结果</th><th>用例</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <p class="note" id="note"></p>
+</main>
+
+<!-- 被测源码：与 index.html 加载的是同一批文件 -->
+<script src="../src/domain/schema.js"></script>
+<script src="../src/domain/text.js"></script>
+<script src="../src/domain/lifecycle.js"></script>
+<script src="../src/domain/query.js"></script>
+<script src="../src/domain/validate.js"></script>
+<script src="../src/storage/adapter.js"></script>
+<script src="../src/storage/seed.js"></script>
+<!-- 运行器与用例 -->
+<script src="runner.js"></script>
+<script src="cases.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  var result = window.LF_RUNNER.run(window.LF_TESTS.groups);
+
+  document.getElementById('board').innerHTML =
+    '<h2>汇总</h2><div class="stats">' +
+    '<div class="stat"><b>' + result.total + '</b><span>用例总数</span></div>' +
+    '<div class="stat ok"><b>' + result.pass + '</b><span>通过</span></div>' +
+    '<div class="stat ' + (result.fail ? 'bad' : '') + '"><b>' + result.fail + '</b><span>失败</span></div>' +
+    '<div class="stat"><b>' + result.groups.length + '</b><span>分组</span></div>' +
+    '</div>';
+
+  var tbody = document.querySelector('#table tbody');
+  result.groups.forEach(function (group) {
+    var head = document.createElement('tr');
+    head.className = 'group';
+    var td = document.createElement('td');
+    td.colSpan = 2;
+    td.textContent = group.name;
+    head.appendChild(td);
+    tbody.appendChild(head);
+
+    group.cases.forEach(function (testCase) {
+      var tr = document.createElement('tr');
+
+      var mark = document.createElement('td');
+      mark.className = testCase.pass ? 'tick' : 'cross';
+      mark.textContent = testCase.pass ? '✔' : '✖';
+      tr.appendChild(mark);
+
+      var name = document.createElement('td');
+      name.textContent = testCase.name;
+      if (!testCase.pass && testCase.detail) {
+        var detail = document.createElement('div');
+        detail.className = 'detail';
+        detail.textContent = testCase.detail;
+        name.appendChild(detail);
+      }
+      tr.appendChild(name);
+
+      tbody.appendChild(tr);
+    });
+  });
+
+  document.getElementById('note').textContent = result.fail === 0
+    ? '全部通过。命令行等价命令：npm test'
+    : '有 ' + result.fail + ' 条失败，详见上方红色说明。';
+})();
+</script>
+</body>
+</html>
