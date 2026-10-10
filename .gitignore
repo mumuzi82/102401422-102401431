@@ -1,0 +1,26 @@
+# 本项目零第三方依赖，下面这些只是防止将来手滑把它们提交上去
+
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 编辑器与系统产生的垃圾
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 临时文件
+*.tmp
+*.log
+~$*
+
+# 只留在本地、不上传仓库的东西
+#   工作计划：我们自己的排期文档，交作业不需要进仓库
+#   原型对照图：本地用来看"实现和原型像不像"，博客里再单独放截图
+docs/工作计划.md
+docs/工作计划.html
+docs/shots/compare-all.png

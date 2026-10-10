@@ -1,0 +1,11 @@
+{
+  "name": "campus-lost-and-found",
+  "version": "1.0.0",
+  "private": true,
+  "description": "校园失物招领 —— 2026秋软件工程结对作业（第二次）程序实现。原生 HTML/CSS/JS，零第三方依赖，双击 index.html 即可运行。",
+  "scripts": {
+    "test": "node tests/run-node.mjs"
+  },
+  "keywords": ["校园失物招领", "原生JavaScript", "零依赖", "结对作业"],
+  "license": "MIT"
+}
