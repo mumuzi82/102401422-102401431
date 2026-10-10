@@ -7,7 +7,8 @@
 
 .icon-title {
   display: flex; align-items: center; gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4) var(--sp-2);
+  margin: 0 var(--sp-4);                          /* 外距 16px */
+  padding: var(--sp-3) var(--sp-4) var(--sp-2);   /* 内距 16px → 合计 32px */
 }
 .icon-title-ico { color: var(--brand); line-height: 0; flex: 0 0 auto; }
 .icon-title-text { color: var(--brand); font-weight: 800; font-size: 14.5px; }
@@ -125,4 +126,43 @@
   padding: var(--sp-3);
   resize: vertical;
   word-break: break-all;
+}
+/* -------------------------------------------------- 首页类别筛选条（丘南星补充） */
+
+.category-bar {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;                        /* ★ 允许换行：所有类别一眼可见，不用滑动 */
+  gap: 8px;
+  margin-top: 4px;
+  padding: 8px var(--sp-4) var(--sp-3);
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+}
+
+.cat-chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  border: 1px solid var(--card-border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 12.5px;
+  padding: 0 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1;
+}
+.cat-chip.is-on {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 700;
+}
+.cat-chip.is-empty {
+  opacity: .4;
+  cursor: not-allowed;
 }
